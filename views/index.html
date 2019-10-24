@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Background Sync Demo</title>
+  <!-- <link rel="manifest" href="/manifest.json" /> -->
+  <link rel="stylesheet" href="/styles.css" />
+  <script defer src="/client.js"></script>
+</head>
+
+<body>
+  <h1>Background Sync Demo</h1>
+  <form id="subscriptionForm" action="/action_page.php">
+    <h3>Subscription Form</h3>
+    <div class="field">
+      <label for="fname">First Name</label>
+      <input type="text" name="fname" id="fname" autocomplete="given-name" />
+    </div>
+    <div class="field">
+      <label for="lname">Last Name</label>
+      <input type="text" name="lname" id="lname" autocomplete="family-name" />
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" autocomplete="email" />
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="formStatus"></div>
+
+  <div id="offlinePrompt">
+    <p>It appears your offline.</p>
+    <p>Would you like to automatically retry when your connection returns and notify you?</p>
+    <button id="offlinePromptBtn-yes">Yes</button>
+    <button id="offlinePromptBtn-no">No</button>
+  </div>
+
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+  </script>
+
+</body>
+
+</html>
