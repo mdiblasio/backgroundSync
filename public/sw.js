@@ -22,10 +22,15 @@ const bgSyncPlugin = new workbox.backgroundSync.Plugin('offlineFormSubmissionsQu
     while (entry = await queue.shiftRequest()) {
       try {
         const response = await fetch(entry.request);
+        const clone = await response.clone();
+        let statusCode = response.status;
+        let statusText = await response.text();
         const cache = await caches.open('offline-form-submissions');
-        const offlineUrl = entry.request.url + '&notification=true';
+        const offlineUrl = `/index.html?statusCode=${statusCode}&statusText=${encodeURI(statusText)}&notification=true`;
 
-        cache.put(offlineUrl, response);
+        console.log(`offlineUrl = ${offlineUrl}`);
+
+        cache.put(offlineUrl, clone);
         showNotification(offlineUrl);
 
       } catch (error) {
@@ -64,4 +69,11 @@ workbox.routing.setCatchHandler(({ event }) => {
     default:
       return Response.error();
   }
+});
+
+self.addEventListener('notificationclick', function(event) {
+   event.notification.close();
+   event.waitUntil(
+      clients.openWindow(event.notification.data.url)
+   );
 });
