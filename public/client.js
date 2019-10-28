@@ -3,6 +3,69 @@ let formStatus = document.getElementById('formStatus');
 let offlinePrompt = document.getElementById('offlinePrompt');
 let offlinePromptBtnYes = document.getElementById('offlinePromptBtn-yes');
 let offlinePromptBtnNo = document.getElementById('offlinePromptBtn-no');
+let boxes = document.getElementById('boxes');
+let toast = document.getElementById('toast');
+let usernameSpan = document.getElementById('username');
+let signinMsg = document.getElementById('signinMsg');
+let signinBtn = document.getElementById('signinBtn');
+let signoutBtn = document.getElementById('signoutBtn');
+
+// setTimeout(() => {
+//   toast.setAttribute('active', 'true');
+// }, 1000);
+
+// setTimeout(() => {
+//   toast.setAttribute('active', 'false');
+// }, 4000);
+
+const isSignedIn = () => {
+  return /signedin=([^;]*)/.test(document.cookie) && /signedin=([^;]*)/.exec(document.cookie)[1] === "true";
+}
+
+const hasUsername = () => {
+  return /username=([^;]*)/.test(document.cookie);
+}
+
+const getUsername = () => {
+  return /username=([^;]*)/.exec(document.cookie)[1];
+}
+
+const showSigninOptions = () => {
+
+  if (hasUsername()) {
+    usernameSpan.innerText = getUsername();
+  }
+
+  if (isSignedIn()) {
+    signinMsg.style.setProperty('display', 'block');
+    signinBtn.style.setProperty('display', 'none');
+    signoutBtn.style.setProperty('display', 'block');
+  } else if (hasUsername()) {
+    signinMsg.style.setProperty('display', 'none');
+    signinBtn.style.setProperty('display', 'block');
+    signoutBtn.style.setProperty('display', 'none');
+
+    let username = getUsername();
+    signinBtn.addEventListener('click', e => {
+      getWebAuthnCredential(username);
+    });
+  } else {
+    console.log("HERE");
+    signinMsg.style.setProperty('display', 'none');
+    signinBtn.style.setProperty('display', 'block');
+    signoutBtn.style.setProperty('display', 'none');
+    signinBtn.addEventListener('click', e => {
+      window.location.href = "/signin.html";
+    });
+  }
+}
+
+signoutBtn.addEventListener('click', e => {
+  document.cookie = 'signedin=false';
+  showSigninOptions();
+})
+
+showSigninOptions();
 
 const formSuccess = statusText => {
   formStatus.style.setProperty('color', 'green');

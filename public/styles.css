@@ -1,5 +1,6 @@
 body {
   margin: 20px;
+  /*margin: 0px;*/
   font-size: 18px;
 }
 
@@ -8,6 +9,61 @@ body {
   width: 100%;
   margin-bottom: 25px;
   position: relative;
+}
+
+:root {
+  --box-width: 200px;
+  --box-height: 200px;
+  --box-background-color: blue;
+  --toast-height: 60px;
+}
+
+#toast {
+  position: fixed;
+  width: 100vw;
+  height: 60px;
+  background-color: gray;
+  color: white;
+  left: 0px;
+  padding: 10px;
+  box-sizing: border-box;
+  animation-duration: 1s;
+  bottom: calc(var(--toast-height) * -1);
+}
+
+#toast[active=true] {
+  bottom: 0px;
+  visibility: unset;
+  animation-name: toastIn;
+}
+
+#toast[active=false] {
+  animation-name: toastOut;
+}
+
+@keyframes toastIn {
+  from {
+    bottom: calc(var(--toast-height) * -1);
+  }
+  to {
+    bottom: 0px;
+  }
+}
+
+@keyframes toastOut {
+  to {
+    bottom: calc(var(--toast-height) * -1);
+  }
+  from {
+    bottom: 0px;
+  }
+}
+
+.box {
+  width: var(--box-width);
+  height: var(--box-height);
+  background-color: var(--box-background-color);
+  margin: 20px calc((100vw / 2 - (var(--box-width) / 2)) - 10px);
 }
 
 input {
@@ -25,7 +81,7 @@ label {
   top: -9px;
   background-color: white;
   padding: 0px 5px;
-  /* 	width: 80px; */
+  /*  width: 80px; */
   text-align: center;
   font-size: 14px;
   color: #2196F3;
@@ -37,10 +93,10 @@ input:focus {
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active  {
-    -webkit-box-shadow: 0 0 0 30px white inset !important;
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
 button {
@@ -51,7 +107,7 @@ button {
   width: 125px;
   color: white;
   background-color: #03A9F4;
-  /* 	border: 2px solid #03A9F4; */
+  /*  border: 2px solid #03A9F4; */
   border: none;
   margin-right: 10px;
 }
@@ -75,15 +131,13 @@ form {
 }
 
 #offlinePrompt {
-	display: none;
+  display: none;
 }
 
 #formStatus {
-	display: none;
-	/*visibility: hidden;*/
-	font-size: 20px;
-	font-weight: bold;
-	color: #673AB7;
+  display: none;
+  /*visibility: hidden;*/
+  font-size: 20px;
+  font-weight: bold;
+  color: #673AB7;
 }
-
-
